@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Terminal Siege</title>
+    <style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#050706;color:#d8ffe7;font-family:"Lucida Console","Courier New",monospace}.shell{width:min(1500px,calc(100vw - 16px));margin:auto;min-height:100vh;display:grid;place-items:center;padding:8px}.screen{width:100%;display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:10px;padding:14px;border:2px solid #464b49;border-radius:8px;background:linear-gradient(#3b403f,#202424);box-shadow:0 28px 90px #0008}.topbar{grid-column:1/-1;display:flex;justify-content:space-between;align-items:end;border-bottom:1px solid #d8ffe744;padding-bottom:10px}.topbar p{margin:0;color:#4de3ff;font-size:.75rem}h1{margin:0;color:#39ff88;font-size:2.35rem;text-shadow:0 0 12px #39ff8866}button{font:inherit}.topbar button{height:38px;background:#08150d;border:1px solid #39ff88;color:#39ff88}.desktop{position:relative;min-height:min(790px,calc(100vh - 118px));overflow:hidden;border:2px solid #0e1511;background:linear-gradient(135deg,#008080,#006d78 55%,#005b66)}.desktop:before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(180deg,#fff1 0 1px,transparent 1px 4px);z-index:20}.icons{display:grid;grid-template-columns:96px;gap:14px;padding:18px 0 54px;position:relative;z-index:1}.icons button{width:96px;min-height:72px;border:1px solid transparent;background:transparent;color:white;text-shadow:1px 1px #003a3a;font-size:.88rem}.icons button:focus,.icons button:hover{border-color:#fff;background:#00008044}.ico{display:block;width:42px;height:34px;margin:0 auto 7px;border:2px solid #111;box-shadow:inset -3px -3px #0004,inset 3px 3px #fff6}.terminal{background:linear-gradient(#111 0 68%,#c0c0c0 68%)}.computer,.bin{background:linear-gradient(#ddd,#888)}.folder{background:linear-gradient(#ffe27a 0 34%,#d9aa24 34%)}.scanner{background:linear-gradient(90deg,transparent 0 20%,#4de3ff 20% 80%,transparent 80%),linear-gradient(#222 0 58%,#c0c0c0 58%)}.note{background:repeating-linear-gradient(#eef 0 5px,#9ad 5px 7px)}.mail{background:linear-gradient(145deg,transparent 47%,#1c4fb8 48% 54%,transparent 55%),linear-gradient(35deg,transparent 47%,#1c4fb8 48% 54%,transparent 55%),#dfe8ff}.taskbar{position:absolute;z-index:30;left:0;right:0;bottom:0;height:38px;display:flex;gap:6px;align-items:center;padding:4px;background:#c0c0c0;border-top:2px solid #fff;color:#000}.taskbar button,.winbar button,.utility-body button{border:2px solid;border-color:#fff #404040 #404040 #fff;background:#c0c0c0;color:#000;min-height:26px}.taskbar span{margin-left:auto;border:2px solid;border-color:#808080 #fff #fff #808080;padding:5px 8px}.hidden{display:none!important}.win{position:absolute;z-index:10;border:2px solid;border-color:#fff #404040 #404040 #fff;background:#c0c0c0;box-shadow:5px 7px #0004;min-width:260px;min-height:180px}.terminal-win{left:128px;top:34px;width:min(720px,calc(100% - 160px));height:560px;min-width:520px;min-height:390px}.scanner-win{left:170px;top:88px;width:420px;min-height:280px}.note-win{right:34px;top:82px;width:410px;min-height:500px}.mail-win{right:70px;bottom:64px;width:460px;min-height:390px}.winbar{height:28px;display:flex;align-items:center;justify-content:space-between;padding:3px 4px 3px 8px;background:linear-gradient(90deg,#000080,#1084d0);color:white;font-weight:bold;font-size:.78rem;cursor:move;user-select:none}.winbar button{width:24px;height:22px;min-height:22px;line-height:1}.inner{height:calc(100% - 28px);padding:10px;background:#020805;color:#39ff88}.terminal-grid{display:grid;grid-template-rows:34px 28px minmax(0,1fr) 56px 32px 180px;gap:6px}.pcbar,.term-title{display:flex;justify-content:space-between;align-items:center;border:1px solid #39ff8844;background:#39ff8812;padding:0 10px;font-size:.86rem}.term-title{background:#39ff88;color:#021108}.terminal-log{overflow:auto;color:#39ff88;font-size:14px;line-height:1.34;padding:8px;border:1px solid #39ff8833}.terminal-log p{margin:0 0 6px}.bad{color:#ff4d6d}.ok{color:#4de3ff}.talk{color:#ffcc4d}.player{color:#39ff88}.attack{color:#fff}.cmd{display:flex;align-items:center;gap:8px;border-top:1px solid #39ff8844;font-size:16px}.cmd input{width:100%;background:transparent;border:0;outline:0;color:#39ff88}.files{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.file{display:grid;grid-template-columns:minmax(0,1fr) 120px 34px;align-items:center;gap:6px;border:1px solid #39ff8844;padding:7px;font-size:.74rem}.file span{overflow:hidden;text-overflow:ellipsis}.file.dead,.file.deleted{color:#ff4d6d;background:#ff4d6d22}.file.deleted{text-decoration:line-through}meter{width:120px;height:10px}.utility{color:#000}.utility-body{height:calc(100% - 28px);padding:12px;font-size:.84rem}.utility-body pre,.note-text,.mail-msg,#mailLoading{margin:10px 0 0;padding:10px;border:2px solid;border-color:#808080 #fff #fff #808080;background:#fff;color:#000;white-space:pre-wrap;line-height:1.32;overflow:auto}.note-text{height:calc(100% - 28px);margin:0;font-size:12.5px}.mail-msg p{margin:0 0 10px}.toast{position:absolute;z-index:40;right:10px;bottom:48px;width:286px;padding:10px;border:2px solid;border-color:#fff #404040 #404040 #fff;background:#fff7c2;color:#000;text-align:left;box-shadow:4px 5px #0004}.toast span{display:block;margin-top:4px}.panel{border:1px solid #d8ffe744;background:#020604cc;padding:10px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:7px}.stats div{min-height:66px;border:1px solid #39ff8838;padding:8px;background:#39ff880d}.stats span{display:block;color:#98eeb8;font-size:.66rem}.stats b{display:block;margin-top:7px;color:#39ff88;font-size:1rem}#message{min-height:104px;margin:10px 0;padding:10px 0;border-top:1px solid #d8ffe733;border-bottom:1px solid #d8ffe733;color:#ffcc4d;font-size:.8rem;line-height:1.45}.legend{display:grid;gap:6px;font-size:.74rem}.legend b{display:inline-grid;min-width:76px;height:24px;place-items:center;margin-right:6px;border:1px solid #39ff8855;color:#39ff88}.resize-handle{position:absolute;right:2px;bottom:2px;width:18px;height:18px;cursor:nwse-resize;background:linear-gradient(135deg,transparent 0 62%,#808080 62% 70%,transparent 70%),linear-gradient(135deg,transparent 0 78%,#808080 78% 86%,transparent 86%);z-index:50}
+.webcam{background:radial-gradient(circle,#4de3ff 0 25%,#111 27% 52%,#c0c0c0 54%)}.voice{background:linear-gradient(90deg,#111 0 25%,#ccc 25% 35%,#111 35% 60%,#ccc 60% 70%,#111 70%)}.map{background:linear-gradient(90deg,#8f8 0 28%,#4de3ff 28% 34%,#ddc 34% 100%)}.desktop.upgraded{background:linear-gradient(135deg,#123c76,#005b80 55%,#003f5d)}.desktop.upgraded:after{content:"UPGRADED WAR ROOM COMPUTER";position:absolute;right:14px;top:10px;color:#d8ffe7aa;font-size:.8rem}.phase2{animation:blinkIn .8s steps(2,end) 2}@keyframes blinkIn{50%{filter:brightness(1.8)}}
+.phone{background:linear-gradient(#111 0 14%,#6fdcff 14% 72%,#111 72%);border-radius:6px}.router-grid{grid-template-rows:34px 28px minmax(0,1fr) 56px 32px 80px}.router-help{margin:0;padding:8px;border:1px solid #39ff8844;background:#06120b;color:#39ff88;white-space:pre-wrap}
+.desktop.vista{background:radial-gradient(circle at 25% 25%,#72d7ff 0 12%,transparent 13%),linear-gradient(135deg,#1a3f91,#0f8d8b 48%,#18345f);image-rendering:pixelated}.desktop.vista:after{content:"WINDOWS VISTA FINAL OPS";position:absolute;right:14px;top:10px;color:white;text-shadow:1px 1px #003;font-size:.82rem}.vista-bar{background:linear-gradient(90deg,#213a8f,#13a7c8)}.vista-inner{background:#061326;color:#d8f7ff}.vistaico{filter:hue-rotate(55deg) saturate(1.4)}.rocket{background:linear-gradient(90deg,transparent 0 35%,#eee 35% 65%,transparent 65%),linear-gradient(#ff4d6d 0 28%,#c0c0c0 28% 70%,#ffcc4d 70%)}.phase3{animation:blinkIn .8s steps(2,end) 3}
+.desktop.xp{background:linear-gradient(160deg,#2455c9 0 38%,#35a03d 39% 62%,#1e7b2d 63% 100%);image-rendering:pixelated}.desktop.xp .taskbar{background:linear-gradient(#3b7cff,#1d50c8);color:white;border-top-color:#6fb2ff}.desktop.xp .taskbar button{background:#2a8b2a;color:white;border-color:#8fe08f #0b4d0b #0b4d0b #8fe08f}.desktop.xp:after{content:"WINDOWS XP WAR ROOM EDITION";position:absolute;right:14px;top:10px;color:white;text-shadow:1px 1px #003;font-size:.82rem}.boot-transition{position:absolute;inset:0;z-index:100;background:#000;pointer-events:none}.boot-transition.run{display:block!important;animation:bootFade 2.3s steps(24,end) forwards}@keyframes bootFade{0%{background:#000;opacity:1}45%{background:#000;opacity:1}70%{background:#fff;opacity:1}100%{background:#fff;opacity:0}}
+.icons{grid-template-columns:96px 96px;grid-auto-flow:column;grid-template-rows:repeat(6,72px);column-gap:10px;row-gap:9px}.fake-map{position:relative;height:210px;margin:10px 0;border:2px solid;border-color:#808080 #fff #fff #808080;background:linear-gradient(90deg,#b7d78f 0 34%,#8fc0e8 34% 41%,#d8c89a 41% 100%);overflow:hidden;image-rendering:pixelated}.fake-map:before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,transparent 0 48%,#ffffff88 49% 51%,transparent 52%),linear-gradient(90deg,transparent 0 48%,#ffffff88 49% 51%,transparent 52%);background-size:48px 48px}.road{position:absolute;height:12px;background:#555;border:2px solid #eee;transform-origin:left}.r1{left:6%;top:58%;width:86%;transform:rotate(-12deg)}.r2{left:16%;top:18%;width:72%;transform:rotate(28deg)}.river{position:absolute;left:35%;top:-8%;width:34px;height:120%;background:#3a91d8;transform:rotate(8deg)}.map-pin{position:absolute;z-index:3;min-height:22px;padding:2px 5px;background:#fff7c2!important;color:#000!important;border:2px solid #111!important;font-size:.72rem;transform:translate(-50%,-50%);cursor:pointer}.map-pin.selected{background:#ff4d6d!important;color:white!important}.map-pin.correct{background:#39ff88!important;color:#021108!important}
+.top-actions{display:flex;gap:8px}.mail-win{width:500px;min-height:430px}.mail-inbox{display:grid;gap:6px;margin-top:10px}.mail-inbox button{text-align:left;min-height:34px;padding:6px 8px}.mail-inbox button.unread{font-weight:bold;background:#fff7c2}.mail-inbox button span{display:block;font-size:.72rem;color:#333}.threat-box{border:1px solid #4de3ff55;background:#4de3ff0d;margin-bottom:10px;padding:8px;font-size:.74rem;line-height:1.35}.threat-box b{display:block;color:#4de3ff;margin-bottom:6px}#threatFeed{color:#d8ffe7}
+.map-tools{display:flex;align-items:center;gap:6px;margin-top:8px}.map-tools button{min-width:34px}.map-tools span{margin-left:auto;padding:4px 7px;border:2px solid;border-color:#808080 #fff #fff #808080;background:#fff;color:#000}.fake-map{height:260px}.map-canvas{position:absolute;inset:0;transform-origin:50% 50%;transition:transform .22s steps(8,end);background:linear-gradient(90deg,#b7d78f 0 30%,#8fc0e8 30% 39%,#d8c89a 39% 68%,#9fb985 68% 100%)}.map-canvas:before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,transparent 0 48%,#ffffff88 49% 51%,transparent 52%),linear-gradient(90deg,transparent 0 48%,#ffffff88 49% 51%,transparent 52%);background-size:48px 48px}.map-canvas:after{content:"SECTOR MAP - 7 SEARCH ZONES";position:absolute;left:8px;bottom:8px;background:#fff7c2;color:#000;border:2px solid #111;padding:3px 6px;font-size:.7rem}.r3{left:10%;top:44%;width:80%;transform:rotate(8deg)}.map-pin{white-space:nowrap}.map-pin[data-location=harbor]{box-shadow:0 0 0 2px #0006}.map-pin.zoom-focus{outline:3px solid #4de3ff}
+.mini-form{display:flex;align-items:center;gap:6px;margin-top:8px}.mini-form input{min-width:0;flex:1;border:2px solid;border-color:#808080 #fff #fff #808080;background:#fff;color:#000;padding:5px;font:inherit}.mini-form span{white-space:nowrap;padding:5px 7px;border:2px solid;border-color:#808080 #fff #fff #808080;background:#111;color:#39ff88}
+
+.desktop.enemy{background:linear-gradient(135deg,#3b1727,#14343d 55%,#111);image-rendering:pixelated}.desktop.enemy:after{content:"OPPOSING SIDE STEALTH MODE";position:absolute;right:14px;top:10px;color:#ffd6e5;text-shadow:1px 1px #300;font-size:.82rem}.enemy-bar{background:linear-gradient(90deg,#5a1028,#1d6172)}.enemyico{filter:hue-rotate(145deg) saturate(1.5)}.phase4{animation:blinkIn .8s steps(2,end) 3}
+
+</style>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="screen">
+        <header class="topbar">
+          <div>
+            <p>WIN98 DEFENSE MACHINE</p>
+            <h1>Terminal Siege</h1>
+          </div>
+          <div class="top-actions">
+            <button id="musicToggle" type="button">SOUND OFF</button>
+            <button id="restart" type="button">REBOOT</button>
+          </div>
+        </header>
+
+        <div class="desktop">
+          <div class="icons">
+            <button class="phase1" data-open="terminal"><i class="ico terminal"></i><span>Defense<br>Terminal</span></button>
+            <button><i class="ico computer"></i><span>My<br>Computer</span></button>
+            <button><i class="ico folder"></i><span>System<br>Files</span></button>
+            <button class="phase1" data-open="scanner"><i class="ico scanner"></i><span>Remote<br>Scanner</span></button>
+            <button class="phase1" data-open="notepad"><i class="ico note"></i><span>Commands.txt</span></button>
+            <button data-open="mail"><i class="ico mail"></i><span>E-<br>Explorer</span></button>
+            <button class="phase2 hidden" data-open="routerterm"><i class="ico terminal"></i><span>Router<br>Terminal</span></button>
+            <button class="phase2 hidden" data-open="webcam"><i class="ico webcam"></i><span>Webcam<br>Trace</span></button>
+            <button class="phase2 hidden" data-open="voice"><i class="ico voice"></i><span>Voice<br>Log</span></button>
+            <button class="phase2 hidden" data-open="phone"><i class="ico phone"></i><span>Mobile<br>Remote</span></button>
+            <button class="phase2 hidden" data-open="map"><i class="ico map"></i><span>Map<br>App</span></button>
+            <button class="phase3 hidden" data-open="vista"><i class="ico terminal vistaico"></i><span>Vista<br>Uplink</span></button>
+            <button class="phase3 hidden" data-open="crypto"><i class="ico note vistaico"></i><span>Crypto<br>Pad</span></button>
+            <button class="phase3 hidden" data-open="rocket"><i class="ico rocket"></i><span>Rocket<br>Control</span></button>
+            <button class="phase4 hidden" data-open="enemy"><i class="ico terminal enemyico"></i><span>Opposing<br>PC</span></button>
+            <button class="phase4 hidden" data-open="team"><i class="ico mail enemyico"></i><span>Team<br>Comms</span></button>
+            <button class="phase4 hidden" data-open="activity"><i class="ico phone enemyico"></i><span>Activity<br>Phone</span></button>
+            <button class="phase4 hidden" data-open="escape"><i class="ico map enemyico"></i><span>Escape<br>Route</span></button>
+            <button><i class="ico bin"></i><span>Recycle<br>Bin</span></button>
+          </div>
+
+          <section id="terminalWin" class="win terminal-win hidden">
+            <div class="winbar"><span>C:\DEFENSE\TERMINAL.EXE</span><button data-close="terminal">x</button></div>
+            <div class="inner terminal-grid">
+              <div class="pcbar"><span>DEFENSE-PC</span><span id="clock">12:53</span></div>
+              <div class="term-title">LIVE CONNECTION: DEFENSE-PC &lt;-&gt; UNKNOWN HACKER</div>
+              <div id="terminalLog" class="terminal-log"></div>
+              <form id="commandForm" class="cmd"><label>C:\&gt;</label><input id="commandInput" spellcheck="false"></form>
+              <div class="term-title">SYSTEM FILES <span id="fileCount">9 FILES</span></div>
+              <div id="fileGrid" class="files"></div>
+            </div>
+          </section>
+
+          <section id="scannerWin" class="win utility scanner-win hidden">
+            <div class="winbar"><span>REMOTE SCANNER</span><button data-close="scanner">x</button></div>
+            <div class="utility-body">
+              <b>HACKER MACHINE SCAN</b>
+              <button id="scanRemote" type="button">RUN SCAN</button>
+              <pre id="scannerOutput">No remote weakness scanned yet.</pre>
+            </div>
+          </section>
+
+          <section id="notepadWin" class="win utility note-win hidden">
+            <div class="winbar"><span>COMMANDS.TXT - Notepad</span><button data-close="notepad">x</button></div>
+            <pre class="note-text">DEFENSE COMMANDS
+scan     trojan file drop
+block    brute force login
+patch    zero-day exploit
+purge    boot sector virus
+trace    rootkit beacon
+decrypt  ransomware lock
+backup   file wipe script
+isolate  botnet flood
+spoof    spoofed route
+
+COUNTER COMMANDS
+ping     exposed modem buffer
+inject   open remote shell
+jam      packet relay loop
+crash    memory leak
+spoofip  exposed ip address
+clone    visible mac address
+wipe     open file share
+kill     attack process
+breach   intel folder</pre>
+          </section>
+
+          <section id="mailWin" class="win utility mail-win hidden">
+            <div class="winbar"><span>E-EXPLORER - Secure Mail</span><button data-close="mail">x</button></div>
+            <div class="utility-body">
+              <b id="mailTitle">SECURITY MAILBOX</b>
+              <div id="mailInbox" class="mail-inbox hidden"></div>
+              <div id="mailLoading">
+                <p>Connecting to secure mail server...</p>
+                <meter id="mailMeter" min="0" max="60" value="0"></meter>
+                <p id="mailLoadText">Loading message: 60s</p>
+              </div>
+              <article id="mailMessage" class="mail-msg hidden"></article>
+            </div>
+          </section>
+
+          <section id="webcamWin" class="win utility scanner-win hidden">
+            <div class="winbar"><span>WEBCAM TRACE</span><button data-close="webcam">x</button></div>
+            <div class="utility-body">
+              <b>REMOTE WEBCAM BUFFER</b>
+              <button id="checkWebcam" type="button">CHECK FEED</button>
+              <pre id="webcamOutput">No webcam clue collected.</pre>
+            </div>
+          </section>
+
+          <section id="voiceWin" class="win utility scanner-win hidden">
+            <div class="winbar"><span>VOICE LOG</span><button data-close="voice">x</button></div>
+            <div class="utility-body">
+              <b>INTERCEPTED AUDIO</b>
+              <button id="playVoice" type="button">PLAY CLIP</button>
+              <pre id="voiceOutput">No voice clue collected.</pre>
+            </div>
+          </section>
+
+          <section id="hackerpcWin" class="win utility scanner-win hidden">
+            <div class="winbar"><span>MOBILE REMOTE ACCESS</span><button data-close="phone">x</button></div>
+            <div class="utility-body">
+              <b>REMOTE PHONE ACCESS</b>
+              <div class="mini-form">
+                <input id="pcCodeInput" autocomplete="off" spellcheck="false" placeholder="mobile passcode">
+                <button id="searchHackerPc" type="button">REMOTE PHONE</button>
+              </div>
+              <pre id="hackerPcOutput">Ping his IP in Router Terminal to get the mobile passcode. Then wait until he leaves his phone.</pre>
+            </div>
+          </section>
+
+          <section id="routertermWin" class="win terminal-win hidden">
+            <div class="winbar"><span>C:\WARROOM\ROUTERTERM.EXE</span><button data-close="routerterm">x</button></div>
+            <div class="inner terminal-grid router-grid">
+              <div class="pcbar"><span>ROUTER-LINK</span><span>TRACE MODE</span></div>
+              <div class="term-title">ROUTER TERMINAL - PING TARGET IP</div>
+              <div id="routerLog" class="terminal-log"></div>
+              <form id="routerForm" class="cmd"><label>ROUTER&gt;</label><input id="routerInput" spellcheck="false" autocomplete="off"></form>
+              <div class="term-title">KNOWN COMMANDS</div>
+              <pre class="router-help">ping 203.0.113.42
+trace phone
+help</pre>
+            </div>
+          </section>
+
+          <section id="vistaWin" class="win terminal-win hidden">
+            <div class="winbar vista-bar"><span>VISTA OPS UPLINK - FINAL MISSION</span><button data-close="vista">x</button></div>
+            <div class="inner terminal-grid router-grid vista-inner">
+              <div class="pcbar"><span>OPPOSING TEAM NETWORK</span><span id="launchTimer">LIFTOFF 7:00</span></div>
+              <div class="term-title">FICTIONAL ROCKET SABOTAGE TERMINAL</div>
+              <div id="vistaLog" class="terminal-log"></div>
+              <form id="vistaForm" class="cmd"><label>VISTA&gt;</label><input id="vistaInput" spellcheck="false" autocomplete="off"></form>
+              <div class="term-title">STATUS</div>
+              <pre id="vistaStatus" class="router-help">Awaiting uplink.</pre>
+            </div>
+          </section>
+
+          <section id="cryptoWin" class="win utility scanner-win hidden">
+            <div class="winbar vista-bar"><span>CRYPTO PAD</span><button data-close="crypto">x</button></div>
+            <div class="utility-body">
+              <b>FINAL MISSION NOTES</b>
+              <pre class="note-text">OPS ROCKET METHOD
+1 scan 10.7.7.0
+2 map silos
+3 spoof cert vista-omega
+4 bypass uac bunker
+5 crack key red-42-echo
+6 inject telemetry ghost
+7 upload abort 203.0.113.42
+8 vent fuel line
+9 arm overload
+10 detonate rocket
+
+Rules:
+- Exact commands only.
+- 3 mistakes locks the uplink.
+- Every mistake removes 20 seconds.
+- Liftoff occurs after 7 minutes.
+- This is fictional game logic.</pre>
+            </div>
+          </section>
+
+          <section id="rocketWin" class="win utility scanner-win hidden">
+            <div class="winbar vista-bar"><span>ROCKET CONTROL VIEW</span><button data-close="rocket">x</button></div>
+            <div class="utility-body">
+              <b>ENEMY ROCKET TELEMETRY</b>
+              <pre id="rocketOutput">No Vista uplink yet. Stop liftoff before 7:00.</pre>
+            </div>
+          </section>
+
+          <section id="enemyWin" class="win utility scanner-win hidden">
+            <div class="winbar enemy-bar"><span>OPPOSING TEAM COMPUTER</span><button data-close="enemy">x</button></div>
+            <div class="utility-body">
+              <b>FINAL BREACH</b>
+              <button id="attemptEnemyHack" type="button">ATTEMPT HACK</button>
+              <pre id="enemyPcOutput">Attempt a final breach after Part III.</pre>
+            </div>
+          </section>
+
+          <section id="teamWin" class="win utility scanner-win hidden">
+            <div class="winbar enemy-bar"><span>TEAM COMMS</span><button data-close="team">x</button></div>
+            <div class="utility-body">
+              <b>RUNAWAY LOCATION MESSAGE</b>
+              <div class="mini-form">
+                <input id="teamMessageInput" autocomplete="off" spellcheck="false" placeholder="message to team">
+                <button id="sendTeamMessage" type="button">SEND</button>
+              </div>
+              <pre id="teamOutput">No field message sent yet.</pre>
+            </div>
+          </section>
+
+          <section id="activityWin" class="win utility scanner-win hidden">
+            <div class="winbar enemy-bar"><span>PHONE ACTIVITY</span><button data-close="activity">x</button></div>
+            <div class="utility-body">
+              <b>CHECK YOUR PHONE</b>
+              <button id="checkActivityPhone" type="button">CHECK ACTIVITY</button>
+              <pre id="activityOutput">Phone activity not checked.</pre>
+            </div>
+          </section>
+
+          <section id="escapeWin" class="win utility mail-win hidden">
+            <div class="winbar enemy-bar"><span>ESCAPE ROUTE</span><button data-close="escape">x</button></div>
+            <div class="utility-body">
+              <b>DO NOT GET CAUGHT</b>
+              <div class="map-tools">
+                <button data-escape="front" type="button">FRONT GATE</button>
+                <button data-escape="metro" type="button">METRO P7</button>
+                <button data-escape="service" type="button">SERVICE TUNNEL</button>
+                <span id="stealthTimer">STEALTH 2:00</span>
+              </div>
+              <pre id="escapeOutput">Send the warning and check phone activity before moving.</pre>
+            </div>
+          </section>
+
+          <section id="mapWin" class="win utility mail-win hidden">
+            <div class="winbar"><span>MAP APP</span><button data-close="map">x</button></div>
+            <div class="utility-body">
+              <b>LOCATION TRIANGULATION</b>
+              <button id="plotMap" type="button">PLOT CLUES</button>
+              <button id="pingFinalIp" type="button">CALL SWAT</button>
+              <div class="map-tools">
+                <button id="mapZoomIn" type="button">+</button>
+                <button id="mapZoomOut" type="button">-</button>
+                <button id="mapZoomReset" type="button">RESET</button>
+                <span id="mapZoomLabel">100%</span>
+              </div>
+              <div id="fakeMap" class="fake-map">
+                <div id="mapCanvas" class="map-canvas">
+                  <button class="map-pin" data-location="airport" style="left:17%;top:21%">Airport</button>
+                  <button class="map-pin" data-location="bank" style="left:47%;top:19%">Central Bank</button>
+                  <button class="map-pin" data-location="substation" style="left:79%;top:24%">Substation</button>
+                  <button class="map-pin" data-location="metro" style="left:28%;top:49%">Metro P7</button>
+                  <button class="map-pin" data-location="harbor" style="left:68%;top:48%">East Harbor</button>
+                  <button class="map-pin" data-location="railyard" style="left:36%;top:78%">Rail Yard</button>
+                  <button class="map-pin" data-location="warehouse" style="left:73%;top:78%">Warehouse</button>
+                  <span class="road r1"></span><span class="road r2"></span><span class="road r3"></span><span class="river"></span>
+                </div>
+              </div>
+              <div class="mini-form">
+                <input id="finalIpInput" autocomplete="off" spellcheck="false" placeholder="target IP">
+                <span id="huntTimer">HUNT 3:00</span>
+              </div>
+              <pre id="mapOutput">Need webcam, voice, and computer clues.</pre>
+            </div>
+          </section>
+
+          <button id="mailToast" class="toast" type="button"><b>New secure mail</b><span>Head of Security is messaging you in E-Explorer.</span></button>
+          <div id="bootTransition" class="boot-transition hidden"></div>
+
+          <div class="taskbar">
+            <button>Start</button>
+            <button id="taskTerminal" class="hidden" data-open="terminal">Defense Terminal</button>
+            <button id="taskScanner" class="hidden" data-open="scanner">Remote Scanner</button>
+            <button id="taskNotepad" class="hidden" data-open="notepad">Commands.txt</button>
+            <button id="taskMail" class="hidden" data-open="mail">E-Explorer</button>
+            <button id="taskRouterterm" class="hidden" data-open="routerterm">Router Terminal</button>
+            <button id="taskWebcam" class="hidden" data-open="webcam">Webcam Trace</button>
+            <button id="taskVoice" class="hidden" data-open="voice">Voice Log</button>
+            <button id="taskHackerpc" class="hidden" data-open="phone">Mobile Remote</button>
+            <button id="taskMap" class="hidden" data-open="map">Map App</button>
+            <button id="taskVista" class="hidden" data-open="vista">Vista Uplink</button>
+            <button id="taskCrypto" class="hidden" data-open="crypto">Crypto Pad</button>
+            <button id="taskRocket" class="hidden" data-open="rocket">Rocket Control</button>
+            <button id="taskEnemy" class="hidden" data-open="enemy">Opposing PC</button>
+            <button id="taskTeam" class="hidden" data-open="team">Team Comms</button>
+            <button id="taskActivity" class="hidden" data-open="activity">Activity Phone</button>
+            <button id="taskEscape" class="hidden" data-open="escape">Escape Route</button>
+            <span id="desktopClock">12:53</span>
+          </div>
+        </div>
+
+        <aside class="panel">
+          <div class="stats">
+            <div><span>Integrity</span><b id="hp">100%</b></div>
+            <div><span>Wave</span><b id="wave">1</b></div>
+            <div><span>Trace</span><b id="trace">0%</b></div>
+            <div><span>IT Ping</span><b id="itPing">2:24</b></div>
+          </div>
+          <p id="message">Learn commands, defend the server, scan weaknesses, and win the war.</p>
+          <div class="threat-box">
+            <b>LIVE THREAT FEED</b>
+            <div id="threatFeed">Awaiting hostile traffic...</div>
+          </div>
+          <div class="legend">
+            <span><b>Terminal</b> defend and type counters</span>
+            <span><b>Scanner</b> find hacker weaknesses</span>
+            <span><b>Notepad</b> command reference</span>
+            <span><b>E-Mail</b> mission briefing</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script>
+const $ = s => document.querySelector(s);
+const ui = {
+  hp: $("#hp"), wave: $("#wave"), trace: $("#trace"), itPing: $("#itPing"), message: $("#message"),
+  clock: $("#clock"), desktopClock: $("#desktopClock"), terminalLog: $("#terminalLog"), commandForm: $("#commandForm"),
+  commandInput: $("#commandInput"), fileGrid: $("#fileGrid"), fileCount: $("#fileCount"), scannerOutput: $("#scannerOutput"),
+  mailToast: $("#mailToast"), mailLoading: $("#mailLoading"), mailMessage: $("#mailMessage"), mailMeter: $("#mailMeter"),
+  mailLoadText: $("#mailLoadText"), mailInbox: $("#mailInbox"), bootTransition: $("#bootTransition"), restart: $("#restart"),
+  musicToggle: $("#musicToggle"), threatFeed: $("#threatFeed"), mapCanvas: $("#mapCanvas"), mapZoomLabel: $("#mapZoomLabel"),
+  pcCodeInput: $("#pcCodeInput"), finalIpInput: $("#finalIpInput"), huntTimer: $("#huntTimer"),
+  routerLog: $("#routerLog"), routerForm: $("#routerForm"), routerInput: $("#routerInput"),
+  vistaLog: $("#vistaLog"), vistaForm: $("#vistaForm"), vistaInput: $("#vistaInput"), vistaStatus: $("#vistaStatus"),
+  launchTimer: $("#launchTimer"), rocketOutput: $("#rocketOutput"), stealthTimer: $("#stealthTimer"), enemyPcOutput: $("#enemyPcOutput"), teamMessageInput: $("#teamMessageInput"), teamOutput: $("#teamOutput"), activityOutput: $("#activityOutput"), escapeOutput: $("#escapeOutput")
+};
+const wins = { terminal: $("#terminalWin"), scanner: $("#scannerWin"), notepad: $("#notepadWin"), mail: $("#mailWin"), routerterm: $("#routertermWin"), webcam: $("#webcamWin"), voice: $("#voiceWin"), phone: $("#hackerpcWin"), map: $("#mapWin"), vista: $("#vistaWin"), crypto: $("#cryptoWin"), rocket: $("#rocketWin"), enemy: $("#enemyWin"), team: $("#teamWin"), activity: $("#activityWin"), escape: $("#escapeWin") };
+const tasks = { terminal: $("#taskTerminal"), scanner: $("#taskScanner"), notepad: $("#taskNotepad"), mail: $("#taskMail"), routerterm: $("#taskRouterterm"), webcam: $("#taskWebcam"), voice: $("#taskVoice"), phone: $("#taskHackerpc"), map: $("#taskMap"), vista: $("#taskVista"), crypto: $("#taskCrypto"), rocket: $("#taskRocket"), enemy: $("#taskEnemy"), team: $("#taskTeam"), activity: $("#taskActivity"), escape: $("#taskEscape") };
+const attacks = [
+  ["BRUTE FORCE LOGIN","Password hammer detected on ADMIN account.","block",14],
+  ["TROJAN FILE DROP","Unknown .EXE copied into SYSTEM32.","scan",12],
+  ["BOOT SECTOR VIRUS","Virus signature writing itself to boot sector.","purge",18],
+  ["ZERO-DAY EXPLOIT","Exploit opened a hole in the network driver.","patch",16],
+  ["SPOOFED ROUTE","Attacker is bouncing through fake addresses.","spoof",10],
+  ["RANSOMWARE LOCK","Personal files are being encrypted one by one.","decrypt",20],
+  ["FILE WIPE SCRIPT","Deletion script targeting your backup folder.","backup",18],
+  ["BOTNET FLOOD","Hundreds of infected machines are hitting one port.","isolate",17],
+  ["ROOTKIT BEACON","Hidden rootkit is calling home from memory.","trace",15]
+].map(([name,prompt,command,damage])=>({name,prompt,command,damage}));
+const openings = [
+  ["EXPOSED MODEM BUFFER","NETWORK / MODEM","His dial-up modem buffer is exposed.","ping",18],
+  ["OPEN REMOTE SHELL","REMOTE ACCESS","A forgotten command shell is open on his side.","inject",24],
+  ["PACKET RELAY LOOP","NETWORK / RELAY","His packet relay is repeating traffic.","jam",20],
+  ["MEMORY LEAK","PROCESS MEMORY","His attack tool is leaking memory.","crash",28],
+  ["EXPOSED IP ADDRESS","NETWORK / IP","Scanner found his public IP: 198.51.100.77.","spoofip",22],
+  ["VISIBLE MAC ADDRESS","HARDWARE / MAC","Scanner found his network card MAC: 00-16-3E-7A-22-91.","clone",21],
+  ["OPEN FILE SHARE","FILESYSTEM","His C:\\WARROOM\\FILES share is open.","wipe",26],
+  ["ATTACK PROCESS","PROCESS LIST","Process VIRUS_LAUNCHER.EXE is visible.","kill",24],
+  ["INTEL FOLDER","FILESYSTEM / INTEL","Folder C:\\INTEL\\OPPOSING_COUNTRY is exposed.","breach",32]
+].map(([name,area,prompt,command,damage])=>({name,area,prompt,command,damage}));
+const taunts = ["HACKER: your firewall looks tired.","HACKER: this desktop belongs to me now.","HACKER: type faster. i am already in.","HACKER: wrong command and i eat another file."];
+const fileNames = ["KERNEL.SYS","LOGIN.DLL","BOOT.INI","MEMORY.BIN","FIREWALL.CFG","NOTES.TXT","NUCLEAR_DATA","SECRET_FILES","LAUNCH_CODES"];
+const defenseCommands = ["scan","block","patch","purge","trace","decrypt","backup","isolate","spoof"];
+const attackCommands = ["ping","inject","jam","crash","spoofip","clone","wipe","kill","breach"];
+const threatLines = [
+  "Unknown modem tone on secure line.",
+  "Firewall heat rising near port 31337.",
+  "Security camera static detected.",
+  "Encrypted chatter mentions East Harbor.",
+  "Satellite relay dropped one packet burst.",
+  "Operator clearance confirmed."
+];
+const briefingMail = "<p><b>FROM:</b> Head of Security</p><p><b>SUBJECT:</b> Server attack warning</p><p><b>RECEIVED:</b> 12:53</p><p>At <b>12:55</b>, a hostile hacker will attempt to break into the national server. By <b>1:05</b>, IT will ping and expose the hacker if you keep the system alive.</p><p>Survive with Commands.txt, or destroy the hacker, recover opposing-country intel, and win the war.</p>";
+const promotionMail = "<p><b>FROM:</b> Head of Security</p><p><b>SUBJECT:</b> Promotion offer</p><p>Outstanding work, Operator.</p><p>You defended the server under live hostile action and recovered intelligence that changes the war.</p><p>Would you like to be accepted as <b>Senior Cyber Defense Commander</b> and receive the upgraded War Room computer?</p><form id='promotionForm'><label>Type yes or no: </label><input id='promotionAnswer' autocomplete='off' spellcheck='false'><button type='submit'>SEND</button></form><p id='promotionReply'></p><p>- Head of Security</p>";
+const vistaSteps = [
+  {cmd:"scan 10.7.7.0", msg:"Subnet scan complete. Launch bunker gateway found.", rocket:"Telemetry link established. Enemy rocket fueling at 12%."},
+  {cmd:"map silos", msg:"Silo map copied. Rocket ID: ORBITAL-7.", rocket:"Silo doors marked. Rocket remains on pad."},
+  {cmd:"spoof cert vista-omega", msg:"Vista-era certificate accepted by bunker gateway.", rocket:"Gateway trust spoofed. Launch controller exposed."},
+  {cmd:"bypass uac bunker", msg:"Bunker UAC prompt bypassed with stolen admin token.", rocket:"Operator console shadow session opened."},
+  {cmd:"crack key red-42-echo", msg:"Launch key cracked. Abort channel exposed.", rocket:"Abort key buffer unlocked."},
+  {cmd:"inject telemetry ghost", msg:"Fake telemetry ghost inserted. Crew sees normal readings.", rocket:"Enemy dashboard still shows green."},
+  {cmd:"upload abort 203.0.113.42", msg:"Abort package uploaded to rocket controller.", rocket:"Abort payload staged but not armed."},
+  {cmd:"vent fuel line", msg:"Fuel vent opened. Rocket pressure falling.", rocket:"Fuel pressure dropping. Liftoff stability weakened."},
+  {cmd:"arm overload", msg:"Overload relay armed in engine controller.", rocket:"Engine controller primed. Detonation command required."},
+  {cmd:"detonate rocket", msg:"Remote detonation armed before liftoff.", rocket:"Rocket destroyed on pad before liftoff."}
+];
+const BASE = 12 * 60 + 53, ATTACK_AT = 24, IT_AT = 144;
+let state, gameTimer, clockTimer, mailTimer, huntTimerId, awayTimerId, webcamTimerId, voiceTimerId, launchTimerId, stealthTimerId, topZ = 10, terminalOpened = false, storyElapsed = 0, mailElapsed = 0, mailMode = "briefing", phaseTwo = false, phaseThree = false, phaseFour = false, mailItems = [], audioCtx, musicTimer, musicOn = false, noteStep = 0;
+let webcamPulse = 0, voicePulse = 0;
+function rand(n){return Math.floor(Math.random()*n)}
+function addThreat(text){ui.threatFeed.textContent=text}
+function beep(freq=220,time=.08,type="square",gain=.035){if(!musicOn||!audioCtx)return;const osc=audioCtx.createOscillator(),g=audioCtx.createGain();osc.type=type;osc.frequency.value=freq;g.gain.value=gain;osc.connect(g);g.connect(audioCtx.destination);osc.start();osc.stop(audioCtx.currentTime+time)}
+function toggleMusic(){if(musicOn){musicOn=false;clearInterval(musicTimer);ui.musicToggle.textContent="SOUND OFF";return}audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();musicOn=true;ui.musicToggle.textContent="SOUND ON";musicTimer=setInterval(()=>{const seq=[110,147,165,196,165,147,123,98];beep(seq[noteStep%seq.length],.07,noteStep%4===0?"sawtooth":"square",.022);noteStep++},240);beep(440,.12,"triangle",.05)}
+function addMail(id,from,subject,time,body,unread=true){const old=mailItems.find(m=>m.id===id);if(old){old.body=body;old.unread=unread;return}mailItems.unshift({id,from,subject,time,body,unread})}
+function renderInbox(){ui.mailInbox.classList.remove("hidden");ui.mailInbox.innerHTML=mailItems.length?mailItems.map(m=>`<button type="button" class="${m.unread?"unread":""}" data-mail="${m.id}">${m.subject}<span>${m.from} - ${m.time}${m.unread?" - NEW":""}</span></button>`).join(""):"<button type='button' disabled>Inbox waiting for secure mail<span>No messages loaded yet</span></button>"}
+function readMail(id){const mail=mailItems.find(m=>m.id===id);if(!mail)return;mail.unread=false;ui.mailLoading.classList.add("hidden");ui.mailMessage.classList.remove("hidden");ui.mailMessage.innerHTML=mail.body;renderInbox();if(id==="promotion"){mailMode="promotion"}}
+function line(text,tone=""){const p=document.createElement("p");p.textContent=text;p.className=tone;ui.terminalLog.appendChild(p);ui.terminalLog.scrollTop=ui.terminalLog.scrollHeight}
+function routerLine(text,tone=""){const p=document.createElement("p");p.textContent=text;p.className=tone;ui.routerLog.appendChild(p);ui.routerLog.scrollTop=ui.routerLog.scrollHeight}
+function vistaLine(text,tone=""){const p=document.createElement("p");p.textContent=text;p.className=tone;ui.vistaLog.appendChild(p);ui.vistaLog.scrollTop=ui.vistaLog.scrollHeight}
+function newState(){return{hp:100,wave:1,trace:0,firewall:0,hackerHp:100,timeLeft:12,phase:"idle",combo:0,current:null,opening:null,over:false,won:false,deletionPlayed:false,mapZoom:1,huntLeft:180,huntFinished:false,launchLeft:420,vistaStep:0,vistaMistakes:0,rocketDone:false,stealthLeft:120,suspicion:0,escaped:false,phase4:{hackFailed:false,messageSent:false,phoneChecked:false,route:null},awayLeft:0,hackerAway:false,hackerSawPc:false,clues:{webcam:false,voice:false,router:false,passcode:false,pc:false,map:false,ip:false,swat:false,pin:null,wrongPins:0,badCodes:0,badIps:0,zoomed:false},files:fileNames.map(n=>({name:n,corrupt:0,deleted:false,secret:n.includes("_")}))}}
+function start(){clearInterval(gameTimer);clearInterval(clockTimer);clearInterval(mailTimer);clearInterval(huntTimerId);clearInterval(awayTimerId);clearInterval(webcamTimerId);clearInterval(voiceTimerId);clearInterval(launchTimerId);clearInterval(stealthTimerId);state=newState();webcamPulse=0;voicePulse=0;resetMapZoom();terminalOpened=false;phaseTwo=false;phaseThree=false;phaseFour=false;storyElapsed=0;mailElapsed=0;mailMode="briefing";mailItems=[];$(".desktop").classList.remove("upgraded","xp","vista","enemy");ui.bootTransition.classList.add("hidden");ui.bootTransition.classList.remove("run");document.querySelectorAll(".phase2,.phase3,.phase4").forEach(x=>x.classList.add("hidden"));document.querySelectorAll(".phase1").forEach(x=>x.classList.remove("hidden"));Object.values(wins).forEach(w=>w.classList.add("hidden"));Object.values(tasks).forEach(t=>t.classList.add("hidden"));ui.mailToast.classList.remove("hidden");ui.mailToast.innerHTML="<b>New secure mail</b><span>Head of Security is messaging you in E-Explorer.</span>";ui.mailInbox.classList.add("hidden");ui.mailInbox.innerHTML="";ui.mailLoading.classList.remove("hidden");ui.mailMessage.classList.add("hidden");ui.mailMeter.value=0;ui.mailLoadText.textContent="Loading message: 60s";ui.scannerOutput.textContent="No remote weakness scanned yet.";$("#webcamOutput").textContent="No webcam clue collected.";$("#voiceOutput").textContent="No voice clue collected.";$("#hackerPcOutput").textContent="Ping his IP in Router Terminal to get the mobile passcode. Then wait until he leaves his phone.";ui.routerLog.innerHTML="";routerLine("ROUTER TERMINAL READY.","ok");routerLine("Ping the rogue IP to pull router mobile metadata.","attack");ui.vistaLog.innerHTML="";ui.vistaStatus.textContent="Awaiting uplink.";ui.rocketOutput.textContent="No Vista uplink yet. Stop liftoff before 7:00.";ui.launchTimer.textContent="LIFTOFF 7:00";if(ui.stealthTimer)ui.stealthTimer.textContent="STEALTH 2:00";if(ui.enemyPcOutput)ui.enemyPcOutput.textContent="Attempt a final breach after Part III.";if(ui.teamOutput)ui.teamOutput.textContent="No field message sent yet.";if(ui.activityOutput)ui.activityOutput.textContent="Phone activity not checked.";if(ui.escapeOutput)ui.escapeOutput.textContent="Send the warning and check phone activity before moving.";if(ui.teamMessageInput)ui.teamMessageInput.value="";ui.pcCodeInput.value="";ui.finalIpInput.value="";ui.routerInput.value="";ui.vistaInput.value="";ui.huntTimer.textContent="HUNT 3:00";addThreat("Awaiting hostile traffic...");ui.terminalLog.innerHTML="";line("RETRO DEFENSE OS BOOTED.","ok");line("Open Defense Terminal to answer the incoming call.","ok");line("NO CARRIER","bad");ui.commandInput.disabled=true;ui.commandInput.value="";clockTimer=setInterval(tickClock,1000);updateClock();render()}
+function openWin(name){wins[name].classList.remove("hidden");tasks[name].classList.remove("hidden");front(wins[name]);if(name==="terminal")openTerminal();if(name==="mail")openMail()}
+function closeWin(name){wins[name].classList.add("hidden");tasks[name].classList.add("hidden")}
+function openTerminal(){ui.commandInput.focus();if(terminalOpened)return;terminalOpened=true;if(storyElapsed<ATTACK_AT)storyElapsed=ATTACK_AT;updateClock();ui.terminalLog.innerHTML="";line("RETRO DEFENSE OS BOOTED.","ok");line("MEMORY MODE: type commands from memory.","ok");line("12:55 WARNING: hostile server intrusion is starting.","bad");line("dialing target... carrier locked at 2400 baud","bad");line("HACKER: hello? anybody home?","talk");ui.commandInput.disabled=false;nextAttack();gameTimer=setInterval(tickGame,1000);render()}
+function openMail(){ui.mailToast.classList.add("hidden");renderInbox();if(mailMode==="promotion"){readMail("promotion");return}if(mailElapsed===0&&mailItems.length===0){mailTimer=setInterval(()=>{mailElapsed++;ui.mailMeter.value=mailElapsed;ui.mailLoadText.textContent=`Loading message: ${60-mailElapsed}s`;if(mailElapsed>=60){clearInterval(mailTimer);showBriefing()}},1000)}}
+function showBriefing(){addMail("briefing","Head of Security","Server attack warning","12:53",briefingMail);ui.mailLoading.classList.add("hidden");readMail("briefing")}
+function showPromotion(){addMail("promotion","Head of Security","Promotion offer","1:05",promotionMail);readMail("promotion")}
+function triggerPromotionMail(){mailMode="promotion";addMail("promotion","Head of Security","Promotion offer","1:05",promotionMail);ui.mailToast.classList.remove("hidden");ui.mailToast.innerHTML="<b>New secure mail</b><span>Head of Security: promotion message received.</span>";ui.mailLoading.classList.add("hidden");ui.mailMessage.classList.add("hidden");renderInbox()}
+function answerPromotion(answer){const reply=$("#promotionReply");const a=answer.trim().toLowerCase();if(a==="no"){reply.textContent="Promotion declined. The Head of Security keeps your current post open.";ui.message.textContent="Promotion declined. You can still type yes if you change your mind.";return}if(a!=="yes"){reply.textContent="Please type yes or no.";return}reply.textContent="Accepted. Preparing upgraded War Room computer...";ui.bootTransition.classList.remove("hidden");ui.bootTransition.classList.add("run");setTimeout(beginPhaseTwo,1450)}
+function beginPhaseTwo(){if(phaseTwo)return;phaseTwo=true;state.huntLeft=180;$(".desktop").classList.add("upgraded","xp");document.querySelectorAll(".phase1").forEach(x=>x.classList.add("hidden"));["terminal","scanner","notepad"].forEach(closeWin);document.querySelectorAll(".phase2").forEach(x=>x.classList.remove("hidden"));ui.message.textContent="Part II: hard mode. Old defense tools are gone. Use Router Terminal to ping his IP, get the mobile passcode, then access his phone only while he is away.";addMail("warroom","Head of Security","War Room investigation orders","1:08","<p><b>FROM:</b> Head of Security</p><p><b>SUBJECT:</b> War Room investigation orders</p><p>The old defense apps are removed from this upgraded machine. Use <b>Router Terminal</b> to ping the rogue IP and pull the mobile passcode through his router.</p><p>Then watch the webcam. When he leaves his phone, remote-access the mobile and recover location evidence. If he returns and sees the session, he flees.</p>");ui.mailToast.classList.remove("hidden");ui.mailToast.innerHTML="<b>War Room XP online</b><span>Router investigation mail received.</span>";renderInbox();addThreat("Hard mode: ping IP, steal mobile passcode, access phone while he is gone.");huntTimerId=setInterval(tickHunt,1000);routerLine("XP WAR ROOM LINK ACTIVE.","ok");routerLine("Try: ping 203.0.113.42","attack");line("WAR ROOM XP COMPUTER ONLINE.","ok");line("MISSION II HARD MODE: router ping, mobile passcode, phone location.","attack");setTimeout(()=>{ui.bootTransition.classList.add("hidden");ui.bootTransition.classList.remove("run")},2400)}
+function tickHunt(){if(!phaseTwo||state.clues.swat)return;state.huntLeft--;ui.huntTimer.textContent=`HUNT ${countdown(Math.max(0,state.huntLeft))}`;if(state.huntLeft===90)addThreat("Hard mode warning: 90 seconds until the hacker returns.");if(state.huntLeft===30)addThreat("Critical: hacker is almost back at his desk.");if(state.huntLeft<=0)hackerReturnedEnding()}
+function liveWebcamText(){const frames=[
+`WEBCAM LIVE ${countdown(Math.max(0,state.awayLeft))}\nChair empty. Monitor glow visible.\nPhone is on the desk.`,
+`WEBCAM LIVE ${countdown(Math.max(0,state.awayLeft))}\nHallway shadow passes the door.\nRed metro sign reflection in the phone glass.\nStatus: still away.`,
+`WEBCAM LIVE ${countdown(Math.max(0,state.awayLeft))}\nKeyboard untouched. Coffee steam fading.\nWarning: he may return soon.`,
+`WEBCAM LIVE ${countdown(Math.max(0,state.awayLeft))}\nPhone screen flashes: EAST HARBOR.\nThe phone is still unattended.`];
+return frames[webcamPulse++%frames.length]}
+function liveVoiceText(){const clips=[
+`VOICE BUFFER ${voicePulse+1}\nStatic... "old radio tower... East Harbor..."`,
+`VOICE BUFFER ${voicePulse+1}\nHACKER: "The phone stays by the desk. Router still has my passcode cached."`,
+`VOICE BUFFER ${voicePulse+1}\nFriend: "Which district?"\nHACKER: "East Harbor. Near the red sign."`,
+`VOICE BUFFER ${voicePulse+1}\nStatic burst. Background: harbor horns and train brakes.`];
+return clips[voicePulse++%clips.length]}
+function tickWebcamFeed(){if(!phaseTwo||state.huntFinished||state.clues.swat)return;if(state.clues.webcam)$("#webcamOutput").textContent=state.hackerAway?liveWebcamText():"WEBCAM LIVE\nHe is back at the desk.\nDo not access Mobile Remote now."}
+function tickVoiceFeed(){if(!phaseTwo||state.huntFinished||state.clues.swat)return;if(state.clues.voice)$("#voiceOutput").textContent=liveVoiceText()}
+function startAwayWindow(){clearInterval(awayTimerId);state.hackerAway=true;state.awayLeft=55;awayTimerId=setInterval(tickAway,1000)}
+function tickAway(){if(!phaseTwo||state.clues.swat||state.huntFinished)return;state.awayLeft--;if(state.awayLeft===20)addThreat("Webcam warning: hacker is walking back to the desk.");if(state.awayLeft<=0){clearInterval(awayTimerId);state.hackerAway=false;$("#webcamOutput").textContent+="\n\nWEBCAM UPDATE\nHe returned to the chair. You are safe if you stop now. Do not press REMOTE PHONE while he is there."}}
+function submitRouter(raw){const cmd=raw.trim().toLowerCase();if(!cmd)return;routerLine(`ROUTER> ${cmd}`,"player");if(!phaseTwo){routerLine("Router terminal is offline until the XP War Room starts.","bad");return}if(cmd==="help"){routerLine("Commands: ping 203.0.113.42, trace phone","ok");return}if(cmd==="ping 203.0.113.42"||cmd==="ping his ip"){state.clues.router=true;state.clues.passcode=true;routerLine("PING 203.0.113.42 ... reply from rogue router.","ok");routerLine("ROUTER CACHE LEAK: paired mobile found.","attack");routerLine("MOBILE PASSCODE: P742","attack");routerLine("Next: wait until webcam shows he is away, then remote the phone.","ok");addThreat("Router ping succeeded. Mobile passcode P742 recovered.");return}if(cmd==="trace phone"){if(!state.clues.passcode){routerLine("No mobile route. Ping his IP first.","bad");return}routerLine("Phone route staged. Requires Mobile Remote while target is away.","ok");return}routerLine("Unknown router command. Try help.","bad")}
+function beginPhaseThree(){if(phaseThree)return;phaseThree=true;phaseTwo=false;state.launchLeft=420;state.vistaStep=0;state.vistaMistakes=0;state.rocketDone=false;$(".desktop").classList.remove("xp");$(".desktop").classList.add("vista");document.querySelectorAll(".phase2").forEach(x=>x.classList.add("hidden"));document.querySelectorAll(".phase3").forEach(x=>x.classList.remove("hidden"));["routerterm","webcam","voice","phone","map"].forEach(closeWin);ui.vistaLog.innerHTML="";vistaLine("WINDOWS VISTA FINAL OPS ONLINE.","ok");vistaLine("OPPOSING TEAM ROCKET LIFTOFF: 7:00.","bad");vistaLine("Final mission expanded: 10 exact commands, 3 mistakes max.","attack");vistaLine("Open Crypto Pad if you need the command chain.","attack");ui.vistaStatus.textContent="Step 1/10 required: scan 10.7.7.0\nMistakes: 0/3\nRocket phase: fueling";ui.rocketOutput.textContent="ROCKET TELEMETRY\nFueling: 12%\nSilo doors: closed\nAbort payload: none\nLiftoff in 7:00";ui.launchTimer.textContent="LIFTOFF 7:00";ui.message.textContent="Part III expanded: 10-command Vista sabotage chain. 7 minutes, 3 mistakes.";addThreat("Vista Final Ops active. Ten-step rocket sabotage started.");launchTimerId=setInterval(tickLaunch,1000);openWin("vista")}
+function tickLaunch(){if(!phaseThree||state.rocketDone)return;state.launchLeft--;ui.launchTimer.textContent=`LIFTOFF ${countdown(Math.max(0,state.launchLeft))}`;if(state.launchLeft===300)addThreat("Rocket fueling stage 2. Five minutes remain.");if(state.launchLeft===120)addThreat("Launch tower retracting. Two minutes remain.");if(state.launchLeft===30)addThreat("Final countdown. Thirty seconds remain.");if(state.launchLeft<=0)rocketLiftoffEnding()}
+function submitVista(raw){const cmd=raw.trim().toLowerCase();if(!cmd)return;vistaLine(`VISTA> ${cmd}`,"player");if(!phaseThree){vistaLine("Vista uplink is not active yet.","bad");return}if(cmd==="help"){vistaLine("Use Crypto Pad. Exact fictional commands only.","ok");return}if(cmd==="status"){vistaLine(`STATUS: step ${state.vistaStep+1}/${vistaSteps.length}, mistakes ${state.vistaMistakes}/3, liftoff ${countdown(Math.max(0,state.launchLeft))}.`,"ok");return}const step=vistaSteps[state.vistaStep];if(step&&cmd===step.cmd){vistaLine(step.msg,"ok");state.vistaStep++;const next=vistaSteps[state.vistaStep]?.cmd||"rocket sequence complete";ui.vistaStatus.textContent=`Step ${Math.min(state.vistaStep+1,vistaSteps.length)}/${vistaSteps.length}\nMistakes: ${state.vistaMistakes}/3\nNext: ${next}`;ui.rocketOutput.textContent=`ROCKET TELEMETRY\nSabotage progress: ${state.vistaStep}/${vistaSteps.length}\n${step.rocket}\nLiftoff: ${countdown(Math.max(0,state.launchLeft))}`;addThreat(`Vista progress ${state.vistaStep}/${vistaSteps.length}: ${step.msg}`);beep(620,.08,"triangle",.04);if(state.vistaStep>=vistaSteps.length)return rocketDetonatedWin();return}state.vistaMistakes++;vistaLine(`BAD METHOD. Vista uplink instability ${state.vistaMistakes}/3. Time penalty: 20s.`,"bad");ui.vistaStatus.textContent=`Wrong command.\nMistakes: ${state.vistaMistakes}/3\nExpected step: ${step?.cmd||"complete"}\nPenalty: -20s`;state.launchLeft=Math.max(0,state.launchLeft-20);ui.rocketOutput.textContent=`ROCKET TELEMETRY\nBad command detected by bunker firewall.\nSabotage progress: ${state.vistaStep}/${vistaSteps.length}\nLiftoff: ${countdown(Math.max(0,state.launchLeft))}`;if(state.vistaMistakes>=3)return rocketLockoutEnding()}
+function rocketDetonatedWin(){clearInterval(launchTimerId);state.rocketDone=true;ui.rocketOutput.textContent="REMOTE DETONATION CONFIRMED\nRocket destroyed on launch pad before liftoff.\nOpposing team launch failed.\n\nNew order: breach their ops computer for retreat evidence.";ui.message.textContent="Part III complete. Final breach attempt unlocked.";vistaLine("ROCKET DETONATED BEFORE LIFTOFF. BREACH WINDOW OPEN.","ok");vistaLine("New order: hack into the opposing team computer. Expect resistance.","attack");addThreat("Rocket stopped. Opposing ops computer is exposed for one last breach.");setTimeout(beginPhaseFour,1600)}
+function beginPhaseFour(){if(phaseFour)return;clearInterval(launchTimerId);phaseThree=false;phaseFour=true;state.stealthLeft=120;state.suspicion=0;state.escaped=false;state.phase4={hackFailed:false,messageSent:false,phoneChecked:false,route:null,finished:false};$(".desktop").classList.remove("vista");$(".desktop").classList.add("enemy");document.querySelectorAll(".phase3").forEach(x=>x.classList.add("hidden"));document.querySelectorAll(".phase4").forEach(x=>x.classList.remove("hidden"));["vista","crypto","rocket"].forEach(closeWin);ui.enemyPcOutput.textContent="OPPOSING TEAM COMPUTER\nBackdoor window is unstable. Press ATTEMPT HACK.";ui.teamOutput.textContent="Team channel waiting. After the hack fails, send the runaway location.";ui.activityOutput.textContent="Phone activity not checked.";ui.escapeOutput.textContent="You are on the other side of the first two missions now. They are tracing you. Do not get caught.";ui.stealthTimer.textContent="STEALTH 2:00";ui.message.textContent="Final phase: hack attempt fails, warn your team, check phone activity, then escape without getting caught.";addMail("runaway","Field Team","Runaway location needed","1:34","<p><b>FROM:</b> Field Team</p><p><b>SUBJECT:</b> Runaway location needed</p><p>The opposing team is scattering after the rocket failure. If your breach fails, send us the runaway location, check your phone for activity, then get out clean.</p>");ui.mailToast.classList.remove("hidden");ui.mailToast.innerHTML="<b>Final phase</b><span>Field Team needs the runaway location.</span>";renderInbox();addThreat("Final stealth phase active. Opposing team is tracing you now.");stealthTimerId=setInterval(tickStealth,1000);openWin("enemy")}function attemptEnemyHack(){if(!phaseFour)return;if(state.phase4.hackFailed){ui.enemyPcOutput.textContent+="\n\nBREACH already failed. Move to Team Comms.";return}state.phase4.hackFailed=true;state.suspicion+=25;ui.enemyPcOutput.textContent="ATTEMPTING OPS-CORE BREACH...\nADMIN TOKEN REJECTED\nTRACEBACK STARTED\n\nHACK FAILED. You saw one useful clue before lockout:\nRUNAWAY LOCATION: East Harbor service tunnels.\nTell your team immediately.";ui.message.textContent="Hack failed. Send your team the runaway location, then check activity on your phone.";addThreat("Breach failed. Traceback started from the opposing computer.")}function sendTeamMessage(){if(!phaseFour)return;if(!state.phase4.hackFailed){ui.teamOutput.textContent="Do the opposing-computer hack attempt first. The warning depends on the failed breach clue.";return}const msg=ui.teamMessageInput.value.trim().toLowerCase();if(!(msg.includes("runaway")&&(msg.includes("location")||msg.includes("east harbor")||msg.includes("tunnel")))){state.suspicion+=10;ui.teamOutput.textContent="Message unclear. Include runaway location or East Harbor tunnels.";return}state.phase4.messageSent=true;ui.teamOutput.textContent="TEAM MESSAGE SENT\nField Team received: runaway location at East Harbor service tunnels.\nNext: check activity on your phone before moving.";ui.message.textContent="Team warned. Check your phone activity, then pick a clean escape route.";addThreat("Runaway location conveyed to your team.")}function checkActivityPhone(){if(!phaseFour)return;if(!state.phase4.messageSent){ui.activityOutput.textContent="Send the runaway-location message first.";return}state.phase4.phoneChecked=true;state.suspicion=Math.max(0,state.suspicion-10);ui.activityOutput.textContent="PHONE ACTIVITY CHECK\n3 missed pings from unknown relay.\nCamera sweep moving from Metro P7 toward East Harbor.\nOpposing team expects you to use the front exit.\nBest route: service tunnel.";ui.message.textContent="Phone activity checked. Use the escape map and avoid the obvious exits.";addThreat("Phone activity shows the trap: front exits are watched.")}function chooseEscapeRoute(route){if(!phaseFour)return;if(!state.phase4.phoneChecked){ui.escapeOutput.textContent="Check your phone activity before choosing a route.";return}state.phase4.route=route;if(route==="service")return stealthWin();const label=route==="metro"?"Metro P7":"front gate";caughtEnding(`CAUGHT AT ${label.toUpperCase()}\nThey predicted that route from your phone activity.`)}function tickStealth(){if(!phaseFour||state.escaped||state.phase4.finished)return;state.stealthLeft--;ui.stealthTimer.textContent=`STEALTH ${countdown(Math.max(0,state.stealthLeft))}`;if(state.stealthLeft===80)addThreat("Enemy trace halfway through your relay chain.");if(state.stealthLeft===35)addThreat("Opposing team patrols are closing in.");if(state.suspicion>=50)return caughtEnding("TRACE SPIKE\nToo many unclear actions exposed your terminal.");if(state.stealthLeft<=0)return caughtEnding("TIME EXPIRED\nThe opposing team completed the trace.")}function caughtEnding(msg){clearInterval(stealthTimerId);state.over=true;state.won=false;state.escaped=false;state.phase4.finished=true;ui.escapeOutput.textContent=`${msg}\nBAD ENDING: you were caught on the other side.`;ui.message.textContent="Bad ending: the opposing team caught you during the escape.";addThreat("Final stealth failed: caught by opposing team.")}function stealthWin(){clearInterval(stealthTimerId);state.won=true;state.over=true;state.escaped=true;state.phase4.finished=true;ui.escapeOutput.textContent="SERVICE TUNNEL ROUTE\nYou moved under the camera sweep, dumped the traced phone, and crossed out clean.\n\nTRUE ENDING: team warned, phone checked, you did not get caught.";ui.message.textContent="True ending: you escaped after warning your team.";addThreat("True ending: runaway location delivered and operator escaped.");addMail("truewin","Head of Security","True ending","1:38","<p><b>FROM:</b> Head of Security</p><p><b>SUBJECT:</b> True ending</p><p>Your final hack failed, but you delivered the runaway location, checked the phone activity, and escaped before the opposing team could catch you.</p>");ui.mailToast.classList.remove("hidden");ui.mailToast.innerHTML="<b>True ending</b><span>You escaped the final trace.</span>";renderInbox()}function rocketLiftoffEnding(){clearInterval(launchTimerId);state.rocketDone=true;ui.rocketOutput.textContent="LIFTOFF\nThe rocket launched before sabotage completed.\nBAD ENDING.";ui.message.textContent="Bad ending: liftoff happened before you stopped the rocket.";vistaLine("LIFTOFF. MISSION FAILED.","bad");addThreat("Final mission failed: rocket launched.")}
+function rocketLockoutEnding(){clearInterval(launchTimerId);state.rocketDone=true;ui.rocketOutput.textContent="UPLINK LOCKED\nThree wrong commands triggered bunker lockdown.\nBAD ENDING.";ui.message.textContent="Bad ending: too many wrong Vista commands locked the uplink.";vistaLine("BUNKER LOCKDOWN. MISSION FAILED.","bad");addThreat("Final mission failed: Vista uplink locked.")}
+function nextAttack(){if(state.over)return;state.current={...attacks[rand(attacks.length)]};state.phase="defense";state.opening=null;state.timeLeft=Math.max(5,13-Math.floor(state.wave/2));if(state.wave>1||Math.random()<.7)line(taunts[rand(taunts.length)],"talk");line(`HACKER> SEND ${state.current.name} [${Math.random().toString(16).slice(2,6).toUpperCase()}]`,"bad");line(`HACKER> ${state.current.prompt}`,"bad");addThreat(`${state.current.name}: ${state.current.timeLeft||state.timeLeft}s until payload lands.`);beep(90,.12,"sawtooth",.045);state.files[rand(state.files.length)].corrupt+=8+state.wave}
+function tickGame(){if(state.over)return;state.timeLeft--;if(state.timeLeft<=0)state.phase==="opening"?missOpening():fail("No response entered.");render()}
+function submit(raw){const cmd=raw.trim().toLowerCase();if(!cmd||state.over)return;line(`YOU> ${cmd}`,"player");if(cmd==="help"){line("Memorize Commands.txt. Scan during counter windows.","ok");return}if(![...defenseCommands,...attackCommands].includes(cmd)){state.hp-=4;line("BAD COMMAND. System stutters.","bad");checkEnd();render();return}if(state.phase==="opening")counter(cmd);else if(cmd===state.current.command)defend(cmd);else if(attackCommands.includes(cmd)){line("No opening is visible yet. Defend first, then counterattack.","bad");state.timeLeft=Math.max(1,state.timeLeft-2)}else fail("Wrong countermeasure.");checkEnd();render()}
+function defend(cmd){state.combo++;state.wave++;state.trace=Math.min(100,state.trace+(cmd==="trace"?22:8)+state.combo);state.firewall=Math.min(12,state.firewall+(["block","isolate","spoof"].includes(cmd)?2:1));heal(["patch","backup","decrypt"].includes(cmd)?24:10);line(`${cmd.toUpperCase()} accepted. Attack neutralized.`,"ok");beep(520,.08,"triangle",.04);if(state.trace>=100)return win("TRACE COMPLETE. Opposing country command route captured.");state.opening={...openings[rand(openings.length)]};state.phase="opening";state.timeLeft=20;ui.scannerOutput.textContent="Remote machine is unstable.\nRun scan now to identify the weakness.";addThreat(`Counter window open: scan for ${state.opening.area}.`);line("OPENING DETECTED ON HACKER MACHINE.","attack");line("Open Remote Scanner and run a scan. Use memory, or open Commands.txt for notes.","attack")}
+function scanRemote(){if(!terminalOpened)return ui.scannerOutput.textContent="No live connection. Open Defense Terminal first.";if(state.phase!=="opening")return ui.scannerOutput.textContent="No active weakness found.\nDefend a hacker payload first, then scan during the opening.";ui.scannerOutput.textContent=`REMOTE SCAN COMPLETE\nAREA: ${state.opening.area}\nWEAKNESS: ${state.opening.name}\n\n${state.opening.prompt}\n\nType the matching counter in Terminal.\nTime left: ${state.timeLeft}s`}
+function counter(cmd){if(cmd!==state.opening.command){line("Counter missed. Recheck the scanned weakness or your memory.","bad");state.timeLeft=Math.max(1,state.timeLeft-5);state.trace=Math.max(0,state.trace-2);beep(130,.12,"square",.045);return}const hit=state.opening.damage+Math.min(12,state.combo*2);state.hackerHp=Math.max(0,state.hackerHp-hit);state.trace=Math.min(100,state.trace+16);line(`${cmd.toUpperCase()} landed. Hacker computer takes ${hit}% damage.`,"attack");addThreat(`Counterattack landed. Hacker system integrity: ${state.hackerHp}%.`);beep(740,.1,"triangle",.045);if(cmd==="breach")line("INTEL PARTIAL: opposing-country server route copied.","attack");line("HACKER: wait. how did you get into my box?","talk");if(state.hackerHp<=0||state.trace>=100)return win("INTEL RECOVERED: opposing country command route captured.");state.phase="defense";state.opening=null;nextAttack()}
+function missOpening(){line("COUNTER WINDOW CLOSED. Hacker patched the opening.","bad");line("HACKER: too slow. i closed that door.","talk");state.phase="defense";state.opening=null;nextAttack()}
+function fail(reason){const dmg=Math.max(4,state.current.damage+Math.floor(state.wave/2)-(state.firewall>0?6:0));state.hp-=dmg;state.firewall=Math.max(0,state.firewall-1);state.combo=0;corrupt(12+state.wave);line(`${reason} Damage taken: ${dmg}%.`,"bad");line("HACKER> PAYLOAD LANDED","bad");addThreat(threatLines[rand(threatLines.length)]);beep(70,.16,"sawtooth",.055);checkEnd();if(!state.over)nextAttack()}
+function corrupt(n){for(let i=0;i<2;i++){const f=state.files[rand(state.files.length)];f.corrupt=Math.min(100,f.corrupt+n)}}
+function heal(n){state.files.forEach(f=>f.corrupt=Math.max(0,f.corrupt-n))}
+function checkEnd(){const dead=state.files.filter(f=>f.corrupt>=100).length;if((state.hp<=0||dead>=3)&&!state.over){state.over=true;ui.commandInput.disabled=true;hacked()}}
+function hacked(){line("HACKER> SYSTEM OWNED","bad");line("HACKER> opening C:\\SYSTEM\\FILES","bad");["NUCLEAR_DATA","SECRET_FILES","LAUNCH_CODES"].forEach(n=>line(`HACKER> delete ${n} /force`,"bad"));line("CRITICAL FAILURE. Secret folders deleted. Press REBOOT to try again.","bad");state.files.forEach(f=>{if(f.secret){f.deleted=true;f.corrupt=100}})}
+function win(msg){state.won=true;state.over=true;ui.commandInput.disabled=true;line("HACKER> CONNECTION DESTROYED","ok");line(msg,"ok");line("VICTORY. Head of Security will contact you.","ok");triggerPromotionMail()}
+function survive(){state.won=true;state.over=true;ui.commandInput.disabled=true;line("1:05 IT DEPARTMENT> ping sweep locked onto hacker.","ok");line("VICTORY. You survived long enough for IT to expose the hacker.","ok");triggerPromotionMail()}
+function checkWebcam(){if(!phaseTwo)return $("#webcamOutput").textContent="Accept the promotion first.";state.clues.webcam=true;startAwayWindow();$("#webcamOutput").textContent="WEBCAM SNAPSHOT\nThe hacker left his chair.\nVisible clue: red metro sign, platform 7.\nStatus: away from his phone for about 55 seconds.\nIf he returns, wait. He only catches you if you press REMOTE PHONE while he is there.";clearInterval(webcamTimerId);webcamTimerId=setInterval(tickWebcamFeed,5000);ui.message.textContent="Webcam clue found. You have time to remote the phone before he comes back."}
+function playVoice(){if(!phaseTwo)return $("#voiceOutput").textContent="Accept the promotion first.";state.clues.voice=true;$("#voiceOutput").textContent='VOICE CLIP\nHACKER: "I am leaving the phone by the desk. East Harbor still has signal."\nLocation clue: East Harbor / old radio tower.';clearInterval(voiceTimerId);voiceTimerId=setInterval(tickVoiceFeed,6500);ui.message.textContent="Voice Log started. It gives extra location chatter, but the phone is the real proof."}
+function searchHackerPc(){if(!phaseTwo)return $("#hackerPcOutput").textContent="Accept the promotion first.";if(!state.clues.passcode)return $("#hackerPcOutput").textContent="No passcode yet. Use Router Terminal and ping 203.0.113.42 first.";if(!state.hackerAway)return hackerReturnedEnding("CAUGHT ON MOBILE REMOTE\nHe is back near the phone, sees the remote access prompt, and flees.");const code=ui.pcCodeInput.value.trim().toUpperCase();if(code!=="P742"){state.clues.badCodes++;if(state.clues.badCodes>=2)return hackerReturnedEnding("BAD PHONE PASSCODES\nThe wrong passcode tripped his mobile lock alarm.");return $("#hackerPcOutput").textContent=`PHONE LOCKED\nBad passcode. ${2-state.clues.badCodes} safe attempt left.\nAway time left: ${state.awayLeft}s\nHint: Router Terminal leaked the mobile passcode.`}state.clues.pc=true;clearInterval(awayTimerId);state.hackerAway=false;$("#hackerPcOutput").textContent="MOBILE REMOTE ACCESS GRANTED\nLOCATION SERVICES COPIED\nYou closed the phone session before he returned.\n\nPHONE DATA\nGPS ping: East Harbor Station\nNearby tower: Radio Tower Annex\nSaved route tag: EAST-HARBOR-RT\nTarget IP remains: 203.0.113.42";ui.message.textContent="Phone location copied before he returned. Now plot the map and confirm East Harbor."}
+function plotMap(){if(!phaseTwo)return $("#mapOutput").textContent="Accept the promotion first.";if(!(state.clues.webcam&&state.clues.passcode&&state.clues.pc))return $("#mapOutput").textContent="Need webcam away proof, router passcode, and mobile location data before plotting.";state.clues.map=true;$("#mapOutput").textContent="MAP READY - HARD MODE\nEvidence loaded:\n- router ping exposed passcode P742\n- phone GPS: East Harbor Station\n- nearby tower: Radio Tower Annex\n- IP 203.0.113.42\n\nZoom to at least 200%, inspect the seven places, then pin the exact location.";ui.message.textContent="Map plotted. Zoom to 200% or more before choosing a location."}
+function setMapZoom(z,x=50,y=50){state.mapZoom=Math.max(1,Math.min(2.8,z));if(state.mapZoom>=2)state.clues.zoomed=true;ui.mapCanvas.style.transformOrigin=`${x}% ${y}%`;ui.mapCanvas.style.transform=`scale(${state.mapZoom})`;ui.mapZoomLabel.textContent=`${Math.round(state.mapZoom*100)}%`}
+function zoomMap(delta){setMapZoom(state.mapZoom+delta)}
+function resetMapZoom(){setMapZoom(1)}
+function chooseMapPin(location){if(!state.clues.map){$("#mapOutput").textContent="Plot the evidence before choosing a place.";return}if(!state.clues.zoomed){$("#mapOutput").textContent="Hard mode requires map zoom of at least 200% before pinning a place.";return}document.querySelectorAll(".map-pin").forEach(p=>p.classList.remove("selected","correct","zoom-focus"));const pin=document.querySelector(`.map-pin[data-location="${location}"]`);pin.classList.add("selected","zoom-focus");const x=parseFloat(pin.style.left)||50,y=parseFloat(pin.style.top)||50;setMapZoom(2.1,x,y);state.clues.pin=location;if(location==="harbor"){pin.classList.add("correct");state.clues.ip=true;$("#mapOutput").textContent="PIN CONFIRMED\nEast Harbor Station, Radio Tower Annex.\nNow type the exact target IP from the phone/router evidence, then call SWAT.";ui.message.textContent="Correct pin. Type the exact IP before calling SWAT."}else{state.clues.wrongPins++;if(state.clues.wrongPins>=2)return wrongLocationEnding();$("#mapOutput").textContent=`WRONG LOCATION\n${pin.textContent} does not match every clue.\nWarning: ${2-state.clues.wrongPins} mistake left before the hacker notices the raid.`;ui.message.textContent="Wrong pin. One more wrong location will trigger a bad ending."}}
+function wrongLocationEnding(){clearInterval(huntTimerId);clearInterval(awayTimerId);clearInterval(webcamTimerId);clearInterval(voiceTimerId);state.over=true;state.won=false;state.huntFinished=true;$("#mapOutput").textContent="SECOND WRONG LOCATION\nThe rogue hacker noticed the false raid pattern.\nHe tracked your field team and ambushed you.\nBAD ENDING: you were shot before SWAT reached the right place.";ui.message.textContent="Bad ending: wrong location twice. The hacker ambushed and shot you.";addMail("badraid","Emergency Dispatch","Raid compromised","1:19","<p><b>FROM:</b> Emergency Dispatch</p><p><b>SUBJECT:</b> Raid compromised</p><p>Two wrong locations gave away the response pattern. The rogue hacker escaped the dragnet.</p><p>Bad ending logged.</p>");ui.mailToast.classList.remove("hidden");ui.mailToast.innerHTML="<b>Bad ending</b><span>The rogue hacker escaped after the wrong raid.</span>";renderInbox();addThreat("Raid pattern compromised. Mission failed.")}
+function hackerReturnedEnding(extra="TIME EXPIRED\nThe rogue hacker returned to his desk and saw the trace."){clearInterval(huntTimerId);clearInterval(awayTimerId);clearInterval(webcamTimerId);clearInterval(voiceTimerId);state.over=true;state.won=false;state.huntFinished=true;$("#mapOutput").textContent=`${extra}\nBAD ENDING: he escaped before SWAT could move.`;ui.message.textContent="Bad ending: the hacker detected the investigation and escaped.";addMail("escaped","Head of Security","Rogue hacker escaped","1:20","<p><b>FROM:</b> Head of Security</p><p><b>SUBJECT:</b> Rogue hacker escaped</p><p>The investigation took too long or tripped his alarm. He wiped the trail before SWAT could move.</p>");ui.mailToast.classList.remove("hidden");ui.mailToast.innerHTML="<b>Bad ending</b><span>The rogue hacker escaped the hard-mode hunt.</span>";renderInbox();addThreat("Hard mode failed: hacker escaped.")}
+function pingFinalIp(){if(!phaseTwo)return $("#mapOutput").textContent="Accept the promotion first.";if(!state.clues.map)return $("#mapOutput").textContent="Plot the clues first.";if(!state.clues.ip)return $("#mapOutput").textContent="Pin the correct location before calling SWAT.";const ip=ui.finalIpInput.value.trim();if(ip!=="203.0.113.42"){state.clues.badIps++;if(state.clues.badIps>=2)return hackerReturnedEnding("BAD IP\nA second wrong IP ping alerted the rogue hacker.");return $("#mapOutput").textContent=`WRONG IP\nThat does not match the router/phone evidence.\n${2-state.clues.badIps} safe IP attempt left.`}clearInterval(huntTimerId);clearInterval(awayTimerId);clearInterval(webcamTimerId);clearInterval(voiceTimerId);state.clues.swat=true;state.huntFinished=true;$("#mapOutput").textContent+="\n\nPING 203.0.113.42... reply.\nSWAT DISPATCHED TO EAST HARBOR STATION.\nROGUE HACKER APPREHENDED.\n\nINTEL FOUND: opposing team rocket liftoff in 7 minutes.";ui.message.textContent="Rogue hacker captured. Final Vista mission unlocked: stop the rocket before liftoff.";addMail("closed","Head of Security","Case closed - final mission unlocked","1:22","<p><b>FROM:</b> Head of Security</p><p><b>SUBJECT:</b> Case closed - final mission unlocked</p><p>SWAT captured the rogue hacker. His phone and router evidence exposed a bigger threat: the opposing team rocket launches in seven minutes.</p><p>Your computer is being upgraded to Windows Vista Final Ops. Detonate the rocket before liftoff using only the fictional Vista Uplink commands.</p>");ui.mailToast.classList.remove("hidden");ui.mailToast.innerHTML="<b>Final mission</b><span>Vista Final Ops unlocked. Stop the rocket.</span>";renderInbox();addThreat("Final mission unlocked: rocket liftoff in 7:00.");setTimeout(beginPhaseThree,1800)}
+function renderFiles(){ui.fileGrid.innerHTML="";state.files.forEach(f=>{const d=document.createElement("div");d.className="file"+(f.corrupt>=100?" dead":"")+(f.deleted?" deleted":"");d.innerHTML=`<span>${f.name}</span><meter min="0" max="100" value="${f.corrupt}"></meter><b>${f.deleted?"DEL":Math.round(f.corrupt)+"%"}</b>`;ui.fileGrid.appendChild(d)});ui.fileCount.textContent=`${state.files.filter(f=>!f.deleted).length} FILES`}
+function render(){ui.hp.textContent=`${Math.max(0,Math.round(state.hp))}%`;ui.wave.textContent=state.wave;ui.trace.textContent=`${state.trace}%`;ui.itPing.textContent=storyElapsed>=IT_AT?"PING":countdown(Math.max(0,IT_AT-storyElapsed));if(!terminalOpened)ui.message.textContent="Open Defense Terminal. Study Commands.txt first if you want, then play from memory.";else if(phaseFour&&state.escaped)ui.message.textContent="True ending: you escaped after warning your team.";else if(phaseFour&&state.phase4.finished)ui.message.textContent=state.won?"True ending: you escaped after warning your team.":"Bad ending: the opposing team caught you during the escape.";else if(phaseFour)ui.message.textContent=`Final stealth: ${countdown(Math.max(0,state.stealthLeft))} to warn, check phone activity, and escape.`;else if(phaseThree&&!state.rocketDone)ui.message.textContent=`Vista final mission: ${countdown(Math.max(0,state.launchLeft))} before liftoff. Exact commands only.`;else if(phaseTwo&&!state.clues.swat&&!state.huntFinished)ui.message.textContent=`Hard hunt active: ${countdown(Math.max(0,state.huntLeft))}. Unlock PC, zoom map, confirm IP, call SWAT.`;else if(state.won)ui.message.textContent="Victory. Check E-Explorer for your new message.";else if(state.over)ui.message.textContent="System crashed. Reboot to defend again.";else if(state.phase==="opening")ui.message.textContent=`Counter window open: ${state.timeLeft}s. Scan the hacker computer and type the counter from memory.`;else ui.message.textContent=`${state.current.name}: ${state.timeLeft}s to defend. Type the learned command.`;renderFiles()}
+function tickClock(){if(terminalOpened&&!state.over)storyElapsed++;updateClock();if(terminalOpened&&!state.over&&storyElapsed>=IT_AT)survive();render()}
+function updateClock(){const m=BASE+Math.floor(storyElapsed/12), t=`${Math.floor(m/60)}:${String(m%60).padStart(2,"0")}`;ui.clock.textContent=t;ui.desktopClock.textContent=t}
+function countdown(s){return `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`}
+function front(w){w.style.zIndex=++topZ}
+function dragResize(w){const bar=w.querySelector(".winbar");bar.onpointerdown=e=>{if(e.target.tagName==="BUTTON")return;e.preventDefault();front(w);const desk=$(".desktop").getBoundingClientRect(),r=w.getBoundingClientRect(),ox=e.clientX-r.left,oy=e.clientY-r.top;w.style.width=r.width+"px";w.style.height=r.height+"px";w.style.right="auto";w.style.bottom="auto";onpointermove=ev=>{w.style.left=Math.max(4,Math.min(desk.width-r.width-4,ev.clientX-desk.left-ox))+"px";w.style.top=Math.max(4,Math.min(desk.height-r.height-42,ev.clientY-desk.top-oy))+"px"};onpointerup=()=>onpointermove=null};const h=document.createElement("div");h.className="resize-handle";w.appendChild(h);h.onpointerdown=e=>{e.stopPropagation();e.preventDefault();front(w);const r=w.getBoundingClientRect(),sx=e.clientX,sy=e.clientY;onpointermove=ev=>{w.style.width=Math.max(260,r.width+ev.clientX-sx)+"px";w.style.height=Math.max(180,r.height+ev.clientY-sy)+"px"};onpointerup=()=>onpointermove=null}}
+Object.values(wins).forEach(dragResize);
+document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openWin(b.dataset.open));
+document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>closeWin(b.dataset.close));
+ui.mailToast.onclick=()=>openWin("mail");ui.scanRemote=$("#scanRemote");ui.scanRemote.onclick=scanRemote;ui.commandForm.onsubmit=e=>{e.preventDefault();submit(ui.commandInput.value);ui.commandInput.value=""};ui.commandInput.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();submit(ui.commandInput.value);ui.commandInput.value=""}};ui.restart.onclick=start;
+ui.routerForm.onsubmit=e=>{e.preventDefault();submitRouter(ui.routerInput.value);ui.routerInput.value=""};ui.routerInput.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();submitRouter(ui.routerInput.value);ui.routerInput.value=""}};
+ui.vistaForm.onsubmit=e=>{e.preventDefault();submitVista(ui.vistaInput.value);ui.vistaInput.value=""};ui.vistaInput.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();submitVista(ui.vistaInput.value);ui.vistaInput.value=""}};
+$("#attemptEnemyHack").onclick=attemptEnemyHack;$("#sendTeamMessage").onclick=sendTeamMessage;$("#checkActivityPhone").onclick=checkActivityPhone;document.querySelectorAll("[data-escape]").forEach(b=>b.onclick=()=>chooseEscapeRoute(b.dataset.escape));$("#checkWebcam").onclick=checkWebcam;$("#playVoice").onclick=playVoice;$("#searchHackerPc").onclick=searchHackerPc;$("#plotMap").onclick=plotMap;$("#pingFinalIp").onclick=pingFinalIp;$("#mapZoomIn").onclick=()=>zoomMap(.35);$("#mapZoomOut").onclick=()=>zoomMap(-.35);$("#mapZoomReset").onclick=resetMapZoom;document.querySelectorAll(".map-pin").forEach(p=>p.onclick=()=>chooseMapPin(p.dataset.location));ui.musicToggle.onclick=toggleMusic;ui.mailInbox.addEventListener("click",e=>{const b=e.target.closest("[data-mail]");if(b)readMail(b.dataset.mail)});ui.mailMessage.addEventListener("submit",e=>{if(e.target.id==="promotionForm"){e.preventDefault();answerPromotion($("#promotionAnswer").value)}});ui.mailMessage.addEventListener("click",e=>{if(e.target.closest("#promotionForm button")){e.preventDefault();answerPromotion($("#promotionAnswer").value)}});ui.mailMessage.addEventListener("keydown",e=>{if(e.target.id==="promotionAnswer"&&e.key==="Enter"){e.preventDefault();answerPromotion(e.target.value)}});
+start();
+
+</script>
+  </body>
+</html>
